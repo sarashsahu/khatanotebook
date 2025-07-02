@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | Khata Notebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #28a745, #7ed957);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .register-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      animation: slideUp 0.5s ease-in-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .register-container h2 {
+      margin-bottom: 20px;
+      color: #28a745;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      color: #28a745;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+<header style="background: linear-gradient(135deg, #007bff, #00c6ff); padding: 20px; text-align: center; color: white;">
+  <h1 style="margin: 0; font-size: 28px;">Khata Notebook</h1>
+  <p style="margin: 5px 0 0; font-size: 14px; font-style: italic;">Aapko yaad ho na ho, humein yaad rahega.</p>
+</header>
+
+<div class="register-container">
+  <h2>Create Account</h2>
+  <form method="post">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Register</button>
+  </form>
+  <a href="/">Already have an account? Login</a>
+</div>
+<!-- FOOTER -->
+<footer style="background-color: #f1f1f1; padding: 15px 20px; text-align: center; font-size: 14px; color: #555; position: absolute; bottom: 0; width: 100%;">
+  <p>Need help? Contact us at <a href="mailto:infam0usxdxdx@gmail.com">support@khatanotebook.com</a></p>
+  <p>&copy; 2025 Khata Notebook. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

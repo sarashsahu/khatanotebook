@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Khata Notebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-light: #f9f9f9;
+      --bg-dark: #121212;
+      --text-light: #eee;
+      --text-dark: #333;
+      --primary: #007bff;
+      --primary-dark: #0056b3;
+      --green: #28a745;
+      --red: #dc3545;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      transition: 0.3s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #00c6ff);
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .topbar h2 {
+      margin: 0;
+    }
+
+    .topbar a {
+      color: var(--primary);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+      align-items: center;
+    }
+
+    input, select, button {
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+    }
+
+    input::placeholder {
+      text-transform: capitalize;
+    }
+
+    input[type="text"] {
+      text-transform: uppercase;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .entry-group {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ddd;
+    }
+
+    body.dark .entry-group {
+      background: #1e1e1e;
+      box-shadow: 0 0 10px #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    body.dark th, body.dark td {
+      border-bottom: 1px solid #444;
+    }
+
+    .btn-delete {
+      background-color: var(--red);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin: 2px;
+    }
+
+    .btn-edit {
+      background-color: var(--green);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin: 2px;
+    }
+
+    .dark-toggle {
+      background-color: #444;
+      color: white;
+    }
+
+    body.dark .dark-toggle {
+      background-color: #ddd;
+      color: black;
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .topbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>💰 Khata Notebook</h1>
+    <p>Aapko yaad ho na ho, humein yaad rahega.</p>
+  </header>
+
+  <div class="content">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <h2>Welcome, {{ email }}!</h2>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <input type="text" id="person" placeholder="Name" oninput="sanitizeText(this)" />
+      <input type="text" id="desc" placeholder="Reason" oninput="sanitizeText(this)" />
+      <input type="number" id="amount" placeholder="Amount" oninput="sanitizeAmount(this)" />
+      <select id="type">
+        <option value="+">+ ADD</option>
+        <option value="-">- SUBTRACT</option>
+      </select>
+      <button onclick="addEntry()">➕ Add Entry</button>
+      <button onclick="exportExcel()">📁 Export</button>
+      <button class="dark-toggle" onclick="toggleDarkMode()">🌗 Toggle Dark Mode</button>
+    </div>
+
+    <!-- ENTRIES -->
+    <div id="entries"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Need help? Contact us at <a href="mailto:infam0usxdxdx@gmail.com">support@khatanotebook.com</a></p>
+    <p>&copy; 2025 Khata Notebook. All rights reserved.</p>
+  </footer>
+
+  <script>
+    let entries = {};
+    let editMode = null;
+
+    function sanitizeText(input) {
+      input.value = input.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+    }
+
+    function sanitizeAmount(input) {
+      input.value = input.value.replace(/[^0-9.]/g, '');
+    }
+
+    function loadEntries() {
+      fetch('/api/entries')
+        .then(res => res.json())
+        .then(data => {
+          entries = data;
+          renderEntries();
+        });
+    }
+
+    function renderEntries() {
+      const container = document.getElementById('entries');
+      container.innerHTML = '';
+
+      for (let person in entries) {
+        const list = entries[person];
+        let balance = list.reduce((sum, e) => sum + e.amount, 0);
+        const balanceColor = balance >= 0 ? 'green' : 'red';
+
+        const div = document.createElement('div');
+        div.className = 'entry-group';
+        div.innerHTML = `
+          <h3>${person} 
+            <span style="color:${balanceColor};">₹${balance.toFixed(2)}</span>
+            <button class="btn-delete" onclick="deletePerson('${person}')">🗑️ Delete All</button>
+          </h3>
+          <table>
+            <tr><th>Date</th><th>Reason</th><th>Amount</th><th>Action</th></tr>
+            ${list.map((e, i) => `
+              <tr>
+                <td>${e.date}</td>
+                <td>${e.desc}</td>
+                <td style="color:${e.amount >= 0 ? 'green' : 'red'};">${e.amount}</td>
+                <td>
+                  <button class="btn-edit" onclick="editEntry('${person}', ${i})">✏️</button>
+                  <button class="btn-delete" onclick="deleteEntry('${person}', ${i})">🗑️</button>
+                </td>
+              </tr>
+            `).join('')}
+          </table>
+        `;
+        container.appendChild(div);
+      }
+    }
+
+    function addEntry() {
+      const person = document.getElementById('person').value.trim();
+      const desc = document.getElementById('desc').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const type = document.getElementById('type').value;
+
+      if (!person || !desc || isNaN(amount)) return alert("Please fill all fields");
+
+      const payload = {
+        person,
+        desc,
+        amount: type === "+" ? amount : -amount,
+        date: new Date().toLocaleDateString()
+      };
+
+      if (editMode) {
+        payload.index = editMode.index;
+        fetch('/api/edit-entry', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(() => {
+          editMode = null;
+          resetForm();
+          loadEntries();
+        });
+      } else {
+        fetch('/api/entry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(() => {
+          resetForm();
+          loadEntries();
+        });
+      }
+    }
+
+    function editEntry(person, index) {
+      const e = entries[person][index];
+      document.getElementById('person').value = person;
+      document.getElementById('desc').value = e.desc;
+      document.getElementById('amount').value = Math.abs(e.amount);
+      document.getElementById('type').value = e.amount >= 0 ? "+" : "-";
+      editMode = { person, index };
+    }
+
+    function deleteEntry(person, index) {
+      fetch('/api/entry', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ person, index })
+      }).then(() => loadEntries());
+    }
+
+    function deletePerson(person) {
+      if (!confirm(`Delete all entries for ${person}?`)) return;
+      fetch('/api/person', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ person })
+      }).then(() => loadEntries());
+    }
+
+    function exportExcel() {
+      fetch('/export-excel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Khata_Notebook.xlsx';
+        a.click();
+      });
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark') ? 'true' : 'false');
+    }
+
+    function loadDarkMode() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark');
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('person').value = '';
+      document.getElementById('desc').value = '';
+      document.getElementById('amount').value = '';
+      document.getElementById('type').value = '+';
+    }
+
+    loadDarkMode();
+    loadEntries();
+  </script>
+
+</body>
+</html>

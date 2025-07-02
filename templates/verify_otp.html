@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Verification | Khata Notebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #ff9800, #ffc107);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .otp-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .otp-container h2 {
+      margin-bottom: 20px;
+      color: #ff9800;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff9800;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e68900;
+    }
+
+    p {
+      font-size: 14px;
+      margin-top: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+<header style="background: linear-gradient(135deg, #007bff, #00c6ff); padding: 20px; text-align: center; color: white;">
+  <h1 style="margin: 0; font-size: 28px;">Khata Notebook</h1>
+  <p style="margin: 5px 0 0; font-size: 14px; font-style: italic;">Aapko yaad ho na ho, humein yaad rahega.</p>
+</header>
+
+<div class="otp-container">
+  <h2>Enter OTP</h2>
+  <form method="post" action="/verify-otp">
+    <input type="text" name="otp" placeholder="Enter OTP" maxlength="6" required>
+    <button type="submit">Verify</button>
+  </form>
+  <p>Check your email for the 6-digit OTP.</p>
+</div>
+
+<!-- FOOTER -->
+<footer style="background-color: #f1f1f1; padding: 15px 20px; text-align: center; font-size: 14px; color: #555; position: absolute; bottom: 0; width: 100%;">
+  <p>Need help? Contact us at <a href="mailto:infam0usxdxdx@gmail.com">support@khatanotebook.com</a></p>
+  <p>&copy; 2025 Khata Notebook. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
