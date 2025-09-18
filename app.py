@@ -16,8 +16,8 @@ app.config.update(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
-    MAIL_USERNAME='infam0usxdxdx@gmail.com',
-    MAIL_PASSWORD='gczxemhstgaxayri',
+    MAIL_USERNAME='ENTER YOUR GMAIL ID',
+    MAIL_PASSWORD='ENTER YOUR GMAIL APP PASSWORD',
     MAIL_DEFAULT_SENDER=('Team - Khata Notebook', 'infam0usxdxdx@gmail.com')
 )
 mail = Mail(app)
